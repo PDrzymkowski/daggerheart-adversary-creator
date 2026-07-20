@@ -54,15 +54,27 @@
   <div><%= f.label :experience %> <%= f.text_field :experience, class: "border rounded px-2 py-1 w-full", "x-model" => "experience" %></div>
 
   <h3 class="font-bold mt-4">Features</h3>
-  <%= f.fields_for :features do |ff| %>
-    <div class="border rounded p-3 mb-2">
+  <template x-for="(feature, index) in features" :key="index">
+    <div class="border rounded p-3 mb-2" x-show="!feature._destroy">
+      <input type="hidden" :name="'adversary[features_attributes][' + index + '][id]'" :value="feature.id || ''">
+      <input type="hidden" :name="'adversary[features_attributes][' + index + '][_destroy]'" :value="feature._destroy ? '1' : '0'">
+      <input type="hidden" :name="'adversary[features_attributes][' + index + '][position]'" :value="index">
       <div class="flex gap-2 mb-1">
-        <%= ff.text_field :name, placeholder: "Feature name", class: "border rounded px-2 py-1 flex-1" %>
-        <%= ff.select :feature_type, Feature::TYPES, {}, class: "border rounded px-2 py-1" %>
+        <input type="text" placeholder="Feature name" class="border rounded px-2 py-1 flex-1"
+          :name="'adversary[features_attributes][' + index + '][name]'" x-model="feature.name">
+        <select class="border rounded px-2 py-1"
+          :name="'adversary[features_attributes][' + index + '][feature_type]'" x-model="feature.feature_type">
+          <option>Passive</option>
+          <option>Action</option>
+          <option>Reaction</option>
+        </select>
+        <button type="button" class="text-red-700 font-bold px-2" @click="removeFeature(index)">&times;</button>
       </div>
-      <%= ff.text_area :description, rows: 2, class: "border rounded px-2 py-1 w-full" %>
+      <textarea class="border rounded px-2 py-1 w-full" rows="2"
+        :name="'adversary[features_attributes][' + index + '][description]'" x-model="feature.description"></textarea>
     </div>
-  <% end %>
+  </template>
+  <button type="button" class="mt-2 px-3 py-1 border rounded font-semibold" @click="addFeature()">+ Add Feature</button>
 
   <div><%= f.submit class: "bg-amber-800 text-white px-4 py-2 rounded font-semibold" %></div>
 <% end %>

@@ -15,7 +15,6 @@ class AdversariesController < ApplicationController
         difficulty: 10, hp: 5, stress: 3, atk: 0
       )
     end
-    @adversary.features.build if @adversary.features.empty?
   end
 
   def edit

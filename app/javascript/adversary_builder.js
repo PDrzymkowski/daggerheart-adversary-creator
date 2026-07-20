@@ -45,5 +45,16 @@ window.adversaryBuilder = function () {
     damageLine() {
       return [this.attack_damage, this.attack_type].filter(Boolean).join(" ")
     },
+    addFeature() {
+      this.features.push(blankFeature())
+    },
+    removeFeature(index) {
+      const feature = this.features[index]
+      if (feature.id) {
+        feature._destroy = true
+      } else {
+        this.features.splice(index, 1)
+      }
+    },
   }
 }

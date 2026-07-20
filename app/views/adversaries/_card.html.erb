@@ -1,37 +1,29 @@
-<div class="bg-[#f5f1e6] border-4 border-double border-amber-800 rounded-lg p-6 shadow-lg font-serif text-stone-900">
-  <h2 class="text-2xl font-bold tracking-wide"><%= adversary.name.presence || "ADVERSARY NAME" %></h2>
-  <p class="italic font-semibold">
-    Tier <%= adversary.tier %> <%= adversary.adversary_type %><%= " #{adversary.type_suffix}" if adversary.type_suffix.present? %>
-  </p>
-  <p class="italic mt-2"><%= adversary.description %></p>
-  <p class="mt-1"><span class="font-bold">Motives &amp; Tactics:</span> <%= adversary.motives_tactics %></p>
+<div x-ref="card" class="bg-[#f5f1e6] border-4 border-double border-amber-800 rounded-lg p-6 shadow-lg font-serif text-stone-900">
+  <h2 class="text-2xl font-bold tracking-wide" x-text="name || 'ADVERSARY NAME'"></h2>
+  <p class="italic font-semibold" x-text="typeLine()"></p>
+  <p class="italic mt-2" x-text="description"></p>
+  <p class="mt-1"><span class="font-bold">Motives &amp; Tactics:</span> <span x-text="motives_tactics"></span></p>
 
   <div class="border-t-2 border-b-2 border-amber-800 my-3 py-2 text-sm">
     <p>
-      <span class="font-bold">Difficulty:</span> <%= adversary.difficulty %> |
-      <span class="font-bold">Thresholds:</span>
-      <%= adversary.threshold_major && adversary.threshold_severe ? "#{adversary.threshold_major}/#{adversary.threshold_severe}" : "None" %> |
-      <span class="font-bold">HP:</span> <%= adversary.hp %> |
-      <span class="font-bold">Stress:</span> <%= adversary.stress %>
+      <span class="font-bold">Difficulty:</span> <span x-text="difficulty"></span> |
+      <span class="font-bold">Thresholds:</span> <span x-text="thresholdLine()"></span> |
+      <span class="font-bold">HP:</span> <span x-text="hp"></span> |
+      <span class="font-bold">Stress:</span> <span x-text="stress"></span>
     </p>
     <p>
-      <span class="font-bold">ATK:</span> <%= adversary.atk >= 0 ? "+#{adversary.atk}" : adversary.atk %> |
-      <%= adversary.attack_name %>: <%= adversary.attack_range %> |
-      <%= [adversary.attack_damage, adversary.attack_type].compact_blank.join(" ") %>
+      <span class="font-bold">ATK:</span> <span x-text="atkLine()"></span> |
+      <span x-text="attack_name"></span>: <span x-text="attack_range"></span> | <span x-text="damageLine()"></span>
     </p>
   </div>
 
-  <% if adversary.experience.present? %>
-    <p class="text-sm">
-      <span class="font-bold">Experience:</span> <%= adversary.experience %>
-    </p>
-  <% end %>
+  <p class="text-sm" x-show="experience"><span class="font-bold">Experience:</span> <span x-text="experience"></span></p>
 
   <h3 class="text-xl font-bold mt-4">FEATURES</h3>
-  <% adversary.features.each do |feature| %>
-    <p class="text-sm mt-2">
-      <span class="italic font-bold"><%= feature.name %> - <%= feature.feature_type %>:</span>
-      <%= feature.description %>
+  <template x-for="(feature, index) in features" :key="index">
+    <p class="text-sm mt-2" x-show="!feature._destroy">
+      <span class="italic font-bold" x-text="feature.name + ' - ' + feature.feature_type + ':'"></span>
+      <span x-text="' ' + feature.description"></span>
     </p>
-  <% end %>
+  </template>
 </div>

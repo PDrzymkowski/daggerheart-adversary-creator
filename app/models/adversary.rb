@@ -25,4 +25,24 @@ class Adversary < ApplicationRecord
     copy.features = features.map(&:dup)
     copy
   end
+
+  BUILDER_ATTRIBUTES = %w[
+    id name tier adversary_type type_suffix description motives_tactics difficulty
+    threshold_major threshold_severe hp stress atk attack_name attack_range
+    attack_damage attack_type experience
+  ].freeze
+
+  def to_builder_json
+    attributes.slice(*BUILDER_ATTRIBUTES).merge(
+      "features" => features.map { |f| { id: f.id, name: f.name, feature_type: f.feature_type, description: f.description, _destroy: false } }
+    ).to_json
+  end
+
+  def self.templates_json
+    where(template: true).order(:tier, :name).map do |a|
+      a.attributes.slice(*BUILDER_ATTRIBUTES).except("id").merge(
+        "features" => a.features.map { |f| { name: f.name, feature_type: f.feature_type, description: f.description, _destroy: false } }
+      )
+    end.to_json
+  end
 end

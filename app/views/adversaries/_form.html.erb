@@ -9,49 +9,49 @@
     </div>
   <% end %>
 
-  <div><%= f.label :name %> <%= f.text_field :name, class: "border rounded px-2 py-1 w-full" %></div>
+  <div><%= f.label :name %> <%= f.text_field :name, class: "border rounded px-2 py-1 w-full", "x-model" => "name" %></div>
 
   <div class="flex gap-3">
     <div>
       <%= f.label :tier %>
-      <%= f.select :tier, (1..4), {}, class: "border rounded px-2 py-1" %>
+      <%= f.select :tier, (1..4), {}, class: "border rounded px-2 py-1", "x-model.number" => "tier" %>
     </div>
     <div>
       <%= f.label :adversary_type, "Type" %>
-      <%= f.select :adversary_type, Adversary::TYPES, {}, class: "border rounded px-2 py-1" %>
+      <%= f.select :adversary_type, Adversary::TYPES, {}, class: "border rounded px-2 py-1", "x-model" => "adversary_type" %>
     </div>
     <div>
       <%= f.label :type_suffix, "Type suffix" %>
-      <%= f.text_field :type_suffix, class: "border rounded px-2 py-1" %>
+      <%= f.text_field :type_suffix, class: "border rounded px-2 py-1", "x-model" => "type_suffix" %>
     </div>
   </div>
 
-  <div><%= f.label :description %> <%= f.text_area :description, rows: 2, class: "border rounded px-2 py-1 w-full" %></div>
-  <div><%= f.label :motives_tactics, "Motives & Tactics" %> <%= f.text_field :motives_tactics, class: "border rounded px-2 py-1 w-full" %></div>
+  <div><%= f.label :description %> <%= f.text_area :description, rows: 2, class: "border rounded px-2 py-1 w-full", "x-model" => "description" %></div>
+  <div><%= f.label :motives_tactics, "Motives & Tactics" %> <%= f.text_field :motives_tactics, class: "border rounded px-2 py-1 w-full", "x-model" => "motives_tactics" %></div>
 
   <div class="flex gap-3">
-    <div><%= f.label :difficulty %> <%= f.number_field :difficulty, class: "border rounded px-2 py-1 w-20" %></div>
-    <div><%= f.label :threshold_major, "Threshold (major)" %> <%= f.number_field :threshold_major, class: "border rounded px-2 py-1 w-20" %></div>
-    <div><%= f.label :threshold_severe, "Threshold (severe)" %> <%= f.number_field :threshold_severe, class: "border rounded px-2 py-1 w-20" %></div>
-    <div><%= f.label :hp, "HP" %> <%= f.number_field :hp, class: "border rounded px-2 py-1 w-20" %></div>
-    <div><%= f.label :stress %> <%= f.number_field :stress, class: "border rounded px-2 py-1 w-20" %></div>
-    <div><%= f.label :atk, "ATK" %> <%= f.number_field :atk, class: "border rounded px-2 py-1 w-20" %></div>
+    <div><%= f.label :difficulty %> <%= f.number_field :difficulty, class: "border rounded px-2 py-1 w-20", "x-model.number" => "difficulty" %></div>
+    <div><%= f.label :threshold_major, "Threshold (major)" %> <%= f.number_field :threshold_major, class: "border rounded px-2 py-1 w-20", "x-model.number" => "threshold_major" %></div>
+    <div><%= f.label :threshold_severe, "Threshold (severe)" %> <%= f.number_field :threshold_severe, class: "border rounded px-2 py-1 w-20", "x-model.number" => "threshold_severe" %></div>
+    <div><%= f.label :hp, "HP" %> <%= f.number_field :hp, class: "border rounded px-2 py-1 w-20", "x-model.number" => "hp" %></div>
+    <div><%= f.label :stress %> <%= f.number_field :stress, class: "border rounded px-2 py-1 w-20", "x-model.number" => "stress" %></div>
+    <div><%= f.label :atk, "ATK" %> <%= f.number_field :atk, class: "border rounded px-2 py-1 w-20", "x-model.number" => "atk" %></div>
   </div>
 
   <div class="flex gap-3">
-    <div><%= f.label :attack_name, "Attack name" %> <%= f.text_field :attack_name, class: "border rounded px-2 py-1" %></div>
+    <div><%= f.label :attack_name, "Attack name" %> <%= f.text_field :attack_name, class: "border rounded px-2 py-1", "x-model" => "attack_name" %></div>
     <div>
       <%= f.label :attack_range, "Range" %>
-      <%= f.select :attack_range, Adversary::RANGES, {}, class: "border rounded px-2 py-1" %>
+      <%= f.select :attack_range, Adversary::RANGES, {}, class: "border rounded px-2 py-1", "x-model" => "attack_range" %>
     </div>
-    <div><%= f.label :attack_damage, "Damage" %> <%= f.text_field :attack_damage, class: "border rounded px-2 py-1" %></div>
+    <div><%= f.label :attack_damage, "Damage" %> <%= f.text_field :attack_damage, class: "border rounded px-2 py-1", "x-model" => "attack_damage" %></div>
     <div>
       <%= f.label :attack_type, "Damage type" %>
-      <%= f.select :attack_type, [["", ""], ["Physical", "phy"], ["Magical", "mag"]], {}, class: "border rounded px-2 py-1" %>
+      <%= f.select :attack_type, [["", ""], ["Physical", "phy"], ["Magical", "mag"]], {}, class: "border rounded px-2 py-1", "x-model" => "attack_type" %>
     </div>
   </div>
 
-  <div><%= f.label :experience %> <%= f.text_field :experience, class: "border rounded px-2 py-1 w-full" %></div>
+  <div><%= f.label :experience %> <%= f.text_field :experience, class: "border rounded px-2 py-1 w-full", "x-model" => "experience" %></div>
 
   <h3 class="font-bold mt-4">Features</h3>
   <%= f.fields_for :features do |ff| %>

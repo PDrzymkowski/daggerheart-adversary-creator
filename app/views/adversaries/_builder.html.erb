@@ -1,4 +1,9 @@
-<div class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+<div
+  x-data="adversaryBuilder()"
+  data-adversary="<%= @adversary.to_builder_json %>"
+  data-templates="<%= Adversary.templates_json %>"
+  class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-8"
+>
   <div><%= render "form", adversary: @adversary %></div>
   <div><%= render "card", adversary: @adversary %></div>
 </div>

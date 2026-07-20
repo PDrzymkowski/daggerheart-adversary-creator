@@ -1,0 +1,68 @@
+<%= form_with model: adversary, class: "space-y-3" do |f| %>
+  <% if adversary.errors.any? %>
+    <div class="bg-red-100 text-red-800 p-3 rounded">
+      <ul>
+        <% adversary.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div><%= f.label :name %> <%= f.text_field :name, class: "border rounded px-2 py-1 w-full" %></div>
+
+  <div class="flex gap-3">
+    <div>
+      <%= f.label :tier %>
+      <%= f.select :tier, (1..4), {}, class: "border rounded px-2 py-1" %>
+    </div>
+    <div>
+      <%= f.label :adversary_type, "Type" %>
+      <%= f.select :adversary_type, Adversary::TYPES, {}, class: "border rounded px-2 py-1" %>
+    </div>
+    <div>
+      <%= f.label :type_suffix, "Type suffix" %>
+      <%= f.text_field :type_suffix, class: "border rounded px-2 py-1" %>
+    </div>
+  </div>
+
+  <div><%= f.label :description %> <%= f.text_area :description, rows: 2, class: "border rounded px-2 py-1 w-full" %></div>
+  <div><%= f.label :motives_tactics, "Motives & Tactics" %> <%= f.text_field :motives_tactics, class: "border rounded px-2 py-1 w-full" %></div>
+
+  <div class="flex gap-3">
+    <div><%= f.label :difficulty %> <%= f.number_field :difficulty, class: "border rounded px-2 py-1 w-20" %></div>
+    <div><%= f.label :threshold_major, "Threshold (major)" %> <%= f.number_field :threshold_major, class: "border rounded px-2 py-1 w-20" %></div>
+    <div><%= f.label :threshold_severe, "Threshold (severe)" %> <%= f.number_field :threshold_severe, class: "border rounded px-2 py-1 w-20" %></div>
+    <div><%= f.label :hp, "HP" %> <%= f.number_field :hp, class: "border rounded px-2 py-1 w-20" %></div>
+    <div><%= f.label :stress %> <%= f.number_field :stress, class: "border rounded px-2 py-1 w-20" %></div>
+    <div><%= f.label :atk, "ATK" %> <%= f.number_field :atk, class: "border rounded px-2 py-1 w-20" %></div>
+  </div>
+
+  <div class="flex gap-3">
+    <div><%= f.label :attack_name, "Attack name" %> <%= f.text_field :attack_name, class: "border rounded px-2 py-1" %></div>
+    <div>
+      <%= f.label :attack_range, "Range" %>
+      <%= f.select :attack_range, Adversary::RANGES, {}, class: "border rounded px-2 py-1" %>
+    </div>
+    <div><%= f.label :attack_damage, "Damage" %> <%= f.text_field :attack_damage, class: "border rounded px-2 py-1" %></div>
+    <div>
+      <%= f.label :attack_type, "Damage type" %>
+      <%= f.select :attack_type, [["", ""], ["Physical", "phy"], ["Magical", "mag"]], {}, class: "border rounded px-2 py-1" %>
+    </div>
+  </div>
+
+  <div><%= f.label :experience %> <%= f.text_field :experience, class: "border rounded px-2 py-1 w-full" %></div>
+
+  <h3 class="font-bold mt-4">Features</h3>
+  <%= f.fields_for :features do |ff| %>
+    <div class="border rounded p-3 mb-2">
+      <div class="flex gap-2 mb-1">
+        <%= ff.text_field :name, placeholder: "Feature name", class: "border rounded px-2 py-1 flex-1" %>
+        <%= ff.select :feature_type, Feature::TYPES, {}, class: "border rounded px-2 py-1" %>
+      </div>
+      <%= ff.text_area :description, rows: 2, class: "border rounded px-2 py-1 w-full" %>
+    </div>
+  <% end %>
+
+  <div><%= f.submit class: "bg-amber-800 text-white px-4 py-2 rounded font-semibold" %></div>
+<% end %>

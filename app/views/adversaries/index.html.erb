@@ -1,0 +1,26 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-bold">Adversaries</h1>
+    <%= link_to "New Adversary", new_adversary_path, class: "bg-amber-800 text-white px-4 py-2 rounded font-semibold" %>
+  </div>
+
+  <h2 class="text-xl font-bold mb-2">Templates</h2>
+  <ul class="mb-6">
+    <% @templates.each do |t| %>
+      <li class="mb-1">
+        <%= link_to "#{t.name} (Tier #{t.tier} #{t.adversary_type})", new_adversary_path(template_id: t.id) %>
+      </li>
+    <% end %>
+  </ul>
+
+  <h2 class="text-xl font-bold mb-2">Your Adversaries</h2>
+  <ul>
+    <% @adversaries.each do |a| %>
+      <li class="mb-1 flex gap-2 items-center">
+        <span><%= a.name %> (Tier <%= a.tier %> <%= a.adversary_type %>)</span>
+        <%= link_to "Edit", edit_adversary_path(a) %>
+        <%= button_to "Delete", adversary_path(a), method: :delete, form: { data: { turbo_confirm: "Delete this adversary?" } } %>
+      </li>
+    <% end %>
+  </ul>
+</div>

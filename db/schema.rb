@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_20_105048) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_20_110837) do
   create_table "adversaries", force: :cascade do |t|
     t.string "adversary_type", null: false
     t.integer "atk", null: false
@@ -33,4 +33,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_20_105048) do
     t.string "type_suffix"
     t.datetime "updated_at", null: false
   end
+
+  create_table "features", force: :cascade do |t|
+    t.integer "adversary_id", null: false
+    t.datetime "created_at", null: false
+    t.text "description", null: false
+    t.string "feature_type", null: false
+    t.string "name", null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["adversary_id"], name: "index_features_on_adversary_id"
+  end
+
+  add_foreign_key "features", "adversaries"
 end

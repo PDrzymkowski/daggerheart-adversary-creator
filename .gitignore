@@ -1,0 +1,5 @@
+# Superpowers workflow files (specs, plans, reviews) — never committed
+docs/superpowers/
+
+# Editor / IDE
+.idea/

@@ -81,12 +81,58 @@ RSpec.describe "Adversaries", type: :request do
     forked = Adversary.find_by(name: "Forked With Features")
     expect(forked).to be_present
     expect(forked.template).to eq(false)
+    expect(forked.features.count).to eq(1)
+    expect(forked.features.sole.name).to eq("Bite")
+    expect(forked.features.sole.id).not_to eq(original_feature.id)
 
     template.reload
     expect(template.name).to eq("Test Adversary")
+    expect(template.features.count).to eq(1)
     original_feature.reload
     expect(original_feature.name).to eq("Bite")
     expect(original_feature.adversary_id).to eq(template.id)
+  end
+
+  it "forks a template, excluding a feature the user marked for removal via _destroy" do
+    template = Adversary.create!(valid_params[:adversary].except(:features_attributes).merge(template: true))
+    kept_feature = template.features.create!(name: "Bite", feature_type: "Action", description: "Chomp.", position: 0)
+    removed_feature = template.features.create!(name: "Claw", feature_type: "Action", description: "Scratch.", position: 1)
+
+    expect {
+      patch adversary_path(template), params: {
+        adversary: {
+          name: "Forked Minus A Feature",
+          features_attributes: {
+            "0" => {
+              id: kept_feature.id,
+              name: kept_feature.name,
+              feature_type: kept_feature.feature_type,
+              description: kept_feature.description,
+              position: 0
+            },
+            "1" => {
+              id: removed_feature.id,
+              name: removed_feature.name,
+              feature_type: removed_feature.feature_type,
+              description: removed_feature.description,
+              position: 1,
+              _destroy: "1"
+            }
+          }
+        }
+      }
+    }.to change(Adversary, :count).by(1)
+
+    expect(response).to redirect_to(adversaries_path)
+
+    forked = Adversary.find_by(name: "Forked Minus A Feature")
+    expect(forked).to be_present
+    expect(forked.features.count).to eq(1)
+    expect(forked.features.sole.name).to eq("Bite")
+
+    template.reload
+    expect(template.features.count).to eq(2)
+    expect(template.features.pluck(:name)).to contain_exactly("Bite", "Claw")
   end
 
   it "destroys an adversary" do

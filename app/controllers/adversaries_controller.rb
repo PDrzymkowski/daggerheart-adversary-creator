@@ -32,9 +32,10 @@ class AdversariesController < ApplicationController
 
   def update
     if @adversary.template?
-      forked = @adversary.dup_with_features
-      forked.assign_attributes(fork_safe_params)
+      forked = @adversary.dup
       forked.template = false
+      forked.assign_attributes(fork_safe_params)
+      forked.features = fork_features
       if forked.save
         redirect_to adversaries_path, notice: "Saved as a new adversary."
       else
@@ -68,21 +69,36 @@ class AdversariesController < ApplicationController
     )
   end
 
-  # Same permitted params as #adversary_params, but with each features_attributes
-  # entry's :id and :_destroy stripped. Used only when forking a template on
-  # update: the form submits the TEMPLATE's real, persisted feature ids, but
-  # dup_with_features gives the fork brand-new, unsaved (id-less) features, so
-  # those ids don't belong to any record on the fork. Treating every submitted
-  # feature as a new record on the fork avoids Rails' nested attributes trying
-  # (and failing) to look up the original's feature ids among the fork's features.
+  # Same permitted params as #adversary_params, minus features_attributes.
+  # Used only when forking a template on update: the fork's features are built
+  # separately (see #fork_features) from the SAME submitted params, so they
+  # must not also be assigned here — assigning them via both paths is exactly
+  # what caused every feature to be duplicated on the fork.
   def fork_safe_params
-    permitted = adversary_params
-    features = permitted[:features_attributes]
-    return permitted unless features
+    adversary_params.except(:features_attributes)
+  end
 
-    permitted[:features_attributes] = features.to_h.transform_values do |feature_attrs|
-      feature_attrs.except(:id, "id", :_destroy, "_destroy")
+  # Builds the fork's features straight from the submitted features_attributes,
+  # as the sole source of truth for what the fork should have. Used only when
+  # forking a template on update.
+  #
+  # The submitted ids belong to the TEMPLATE's persisted features, not to the
+  # fork (which starts with no features of its own via plain #dup), so keeping
+  # them would make Rails' nested attributes try, and fail, to reconcile them
+  # against the fork. Every surviving entry is therefore built as a brand-new,
+  # unsaved Feature.
+  #
+  # Entries marked _destroy (features the user removed in the builder before
+  # submitting) are dropped entirely rather than assigned: there is nothing to
+  # destroy on an unsaved fork, and simply omitting them keeps the removal
+  # intent instead of silently discarding it.
+  def fork_features
+    features = adversary_params[:features_attributes] || {}
+    features.to_h.values.filter_map do |feature_attrs|
+      attrs = feature_attrs.to_h
+      next if ActiveModel::Type::Boolean.new.cast(attrs["_destroy"] || attrs[:_destroy])
+
+      Feature.new(attrs.except("id", :id, "_destroy", :_destroy))
     end
-    permitted
   end
 end

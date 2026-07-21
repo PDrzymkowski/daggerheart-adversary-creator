@@ -5,21 +5,27 @@
   </div>
 
   <h2 class="text-xl font-bold mb-2">Templates</h2>
-  <ul class="mb-6">
+  <ul class="mb-6 space-y-1">
     <% @templates.each do |t| %>
-      <li class="mb-1">
-        <%= link_to "#{t.name} (Tier #{t.tier} #{t.adversary_type})", new_adversary_path(template_id: t.id) %>
+      <li>
+        <%= link_to "Use as template", new_adversary_path(template_id: t.id), class: "text-amber-800 underline" %>
+        &mdash; <%= t.name %> (Tier <%= t.tier %> <%= t.adversary_type %>)
       </li>
     <% end %>
   </ul>
 
   <h2 class="text-xl font-bold mb-2">Your Adversaries</h2>
-  <ul>
+  <% if @adversaries.empty? %>
+    <p class="text-stone-500">Nothing saved yet — start from a template above or create a blank one.</p>
+  <% end %>
+  <ul class="space-y-1">
     <% @adversaries.each do |a| %>
-      <li class="mb-1 flex gap-2 items-center">
-        <span><%= a.name %> (Tier <%= a.tier %> <%= a.adversary_type %>)</span>
-        <%= link_to "Edit", edit_adversary_path(a) %>
-        <%= button_to "Delete", adversary_path(a), method: :delete, form: { data: { turbo_confirm: "Delete this adversary?" } } %>
+      <li class="flex gap-3 items-center">
+        <span class="flex-1"><%= a.name %> (Tier <%= a.tier %> <%= a.adversary_type %>)</span>
+        <%= link_to "Edit", edit_adversary_path(a), class: "text-amber-800 underline" %>
+        <%= button_to "Delete", adversary_path(a), method: :delete,
+              form: { data: { turbo_confirm: "Delete this adversary?" } },
+              class: "text-red-700 underline bg-transparent p-0 font-inherit" %>
       </li>
     <% end %>
   </ul>

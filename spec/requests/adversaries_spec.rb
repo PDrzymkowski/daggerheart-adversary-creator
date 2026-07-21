@@ -55,6 +55,40 @@ RSpec.describe "Adversaries", type: :request do
     expect(Adversary.find_by(name: "Forked").template).to eq(false)
   end
 
+  it "forks a template into a new adversary when the submitted form includes the template's real feature id" do
+    template = Adversary.create!(valid_params[:adversary].merge(template: true))
+    original_feature = template.features.sole
+
+    expect {
+      patch adversary_path(template), params: {
+        adversary: {
+          name: "Forked With Features",
+          features_attributes: {
+            "0" => {
+              id: original_feature.id,
+              name: original_feature.name,
+              feature_type: original_feature.feature_type,
+              description: original_feature.description,
+              position: 0
+            }
+          }
+        }
+      }
+    }.to change(Adversary, :count).by(1)
+
+    expect(response).to redirect_to(adversaries_path)
+
+    forked = Adversary.find_by(name: "Forked With Features")
+    expect(forked).to be_present
+    expect(forked.template).to eq(false)
+
+    template.reload
+    expect(template.name).to eq("Test Adversary")
+    original_feature.reload
+    expect(original_feature.name).to eq("Bite")
+    expect(original_feature.adversary_id).to eq(template.id)
+  end
+
   it "destroys an adversary" do
     adversary = Adversary.create!(valid_params[:adversary].except(:features_attributes))
     expect {

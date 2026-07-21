@@ -33,7 +33,7 @@ class AdversariesController < ApplicationController
   def update
     if @adversary.template?
       forked = @adversary.dup_with_features
-      forked.assign_attributes(adversary_params)
+      forked.assign_attributes(fork_safe_params)
       forked.template = false
       if forked.save
         redirect_to adversaries_path, notice: "Saved as a new adversary."
@@ -66,5 +66,23 @@ class AdversariesController < ApplicationController
       :attack_name, :attack_range, :attack_damage, :attack_type, :experience,
       features_attributes: [ :id, :name, :feature_type, :description, :position, :_destroy ]
     )
+  end
+
+  # Same permitted params as #adversary_params, but with each features_attributes
+  # entry's :id and :_destroy stripped. Used only when forking a template on
+  # update: the form submits the TEMPLATE's real, persisted feature ids, but
+  # dup_with_features gives the fork brand-new, unsaved (id-less) features, so
+  # those ids don't belong to any record on the fork. Treating every submitted
+  # feature as a new record on the fork avoids Rails' nested attributes trying
+  # (and failing) to look up the original's feature ids among the fork's features.
+  def fork_safe_params
+    permitted = adversary_params
+    features = permitted[:features_attributes]
+    return permitted unless features
+
+    permitted[:features_attributes] = features.to_h.transform_values do |feature_attrs|
+      feature_attrs.except(:id, "id", :_destroy, "_destroy")
+    end
+    permitted
   end
 end

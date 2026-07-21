@@ -42,3 +42,5 @@ docs/superpowers/
 
 # Editor / IDE
 .idea/
+.claude/
+.playwright-mcp/

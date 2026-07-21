@@ -19,7 +19,7 @@ Then:
 
 ```bash
 bundle install
-bin/rails db:setup   # creates the db, runs migrations, loads db/seeds.rb
+bin/rails db:prepare   # creates the db, loads the schema, seeds — safe to re-run
 ```
 
 ## Running

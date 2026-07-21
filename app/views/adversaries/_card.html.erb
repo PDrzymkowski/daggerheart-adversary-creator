@@ -20,7 +20,7 @@
   <p class="text-sm" x-show="experience"><span class="font-bold">Experience:</span> <span x-text="experience"></span></p>
 
   <h3 class="text-xl font-bold mt-4">FEATURES</h3>
-  <template x-for="(feature, index) in features" :key="index">
+  <template x-for="(feature, index) in features">
     <p class="text-sm mt-2" x-show="!feature._destroy">
       <span class="italic font-bold" x-text="feature.name + ' - ' + feature.feature_type + ':'"></span>
       <span x-text="' ' + feature.description"></span>

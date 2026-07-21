@@ -1,3 +1,5 @@
+import * as htmlToImage from "html-to-image"
+
 function blankFeature() {
   return { id: null, name: "", feature_type: "Passive", description: "", _destroy: false }
 }
@@ -63,6 +65,14 @@ window.adversaryBuilder = function () {
       Object.assign(this, template)
       this.id = null
       if (this.features.length === 0) this.features.push(blankFeature())
+    },
+    downloadPng() {
+      htmlToImage.toPng(this.$refs.card).then((dataUrl) => {
+        const link = document.createElement("a")
+        link.download = (this.name || "adversary").toLowerCase().replace(/\s+/g, "-") + ".png"
+        link.href = dataUrl
+        link.click()
+      })
     },
   }
 }

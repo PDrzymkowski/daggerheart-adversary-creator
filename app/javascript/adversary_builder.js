@@ -56,5 +56,13 @@ window.adversaryBuilder = function () {
         this.features.splice(index, 1)
       }
     },
+    loadTemplate(index) {
+      if (index === "") return
+      const template = this.templates[index]
+      if (!template) return
+      Object.assign(this, template)
+      this.id = null
+      if (this.features.length === 0) this.features.push(blankFeature())
+    },
   }
 }

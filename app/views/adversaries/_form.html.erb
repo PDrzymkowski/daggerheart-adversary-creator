@@ -9,6 +9,16 @@
     </div>
   <% end %>
 
+  <div>
+    <label class="font-semibold">Start from a template</label>
+    <select class="border rounded px-2 py-1 w-full" x-model="selectedTemplateId" @change="loadTemplate($event.target.value)">
+      <option value="">-- Blank --</option>
+      <template x-for="(t, index) in templates" :key="index">
+        <option :value="index" x-text="'Tier ' + t.tier + ' ' + t.adversary_type + ': ' + t.name"></option>
+      </template>
+    </select>
+  </div>
+
   <div><%= f.label :name %> <%= f.text_field :name, class: "border rounded px-2 py-1 w-full", "x-model" => "name" %></div>
 
   <div class="flex gap-3">

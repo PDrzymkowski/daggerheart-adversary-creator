@@ -1,13 +1,25 @@
+<%
+  builder_i18n = {
+    tier: t("adversaries.js.tier"),
+    none: t("adversaries.js.none"),
+    namePlaceholder: t("adversaries.card.name_placeholder"),
+    adversaryTypes: Adversary::TYPES.index_with { |type| t("adversaries.adversary_types.#{type}") },
+    ranges: Adversary::RANGES.index_with { |range| t("adversaries.ranges.#{range}") },
+    damageTypes: %w[phy mag phy_mag].index_with { |type| t("adversaries.damage_types.#{type}") },
+    featureTypes: Feature::TYPES.index_with { |type| t("adversaries.feature_types.#{type}") },
+  }.to_json
+%>
 <div
   x-data="adversaryBuilder()"
   data-adversary="<%= @adversary.to_builder_json %>"
   data-templates="<%= Adversary.templates_json %>"
-  class="max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-8"
+  data-i18n="<%= builder_i18n %>"
+  class="max-w-6xl mx-auto grid grid-cols-1 gap-8 lg:grid-cols-2"
 >
   <div><%= render "form", adversary: @adversary %></div>
-  <div>
-    <button type="button" @click="downloadPng()" class="mb-3 bg-stone-700 text-white px-4 py-2 rounded font-semibold">
-      Download PNG
+  <div class="lg:sticky lg:top-6 lg:self-start">
+    <button type="button" @click="downloadPng()" class="dh-btn-primary mb-3">
+      <%= t(".download_png") %>
     </button>
     <%= render "card", adversary: @adversary %>
   </div>

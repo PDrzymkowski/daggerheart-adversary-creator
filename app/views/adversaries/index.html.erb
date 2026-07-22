@@ -1,31 +1,31 @@
 <div class="max-w-4xl mx-auto p-6">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-2xl font-bold">Adversaries</h1>
-    <%= link_to "New Adversary", new_adversary_path, class: "bg-amber-800 text-white px-4 py-2 rounded font-semibold" %>
+    <h1 class="text-2xl font-bold"><%= t(".heading") %></h1>
+    <%= link_to t(".new_adversary"), new_adversary_path, class: "dh-btn-primary" %>
   </div>
 
-  <h2 class="text-xl font-bold mb-2">Templates</h2>
+  <h2 class="text-xl font-bold mb-2"><%= t(".templates_heading") %></h2>
   <ul class="mb-6 space-y-1">
-    <% @templates.each do |t| %>
+    <% @templates.each do |template| %>
       <li>
-        <%= link_to "Use as template", new_adversary_path(template_id: t.id), class: "text-amber-800 underline" %>
-        &mdash; <%= t.name %> (Tier <%= t.tier %> <%= t.adversary_type %>)
+        <%= link_to t(".use_as_template"), new_adversary_path(template_id: template.id), class: "text-dh-maroon underline cursor-pointer" %>
+        &mdash; <%= template.name %> (<%= t("adversaries.js.tier") %> <%= template.tier %> <%= t("adversaries.adversary_types.#{template.adversary_type}") %>)
       </li>
     <% end %>
   </ul>
 
-  <h2 class="text-xl font-bold mb-2">Your Adversaries</h2>
+  <h2 class="text-xl font-bold mb-2"><%= t(".your_adversaries_heading") %></h2>
   <% if @adversaries.empty? %>
-    <p class="text-stone-500">Nothing saved yet — start from a template above or create a blank one.</p>
+    <p class="text-stone-500"><%= t(".empty") %></p>
   <% end %>
   <ul class="space-y-1">
-    <% @adversaries.each do |a| %>
+    <% @adversaries.each do |adversary| %>
       <li class="flex gap-3 items-center">
-        <span class="flex-1"><%= a.name %> (Tier <%= a.tier %> <%= a.adversary_type %>)</span>
-        <%= link_to "Edit", edit_adversary_path(a), class: "text-amber-800 underline" %>
-        <%= button_to "Delete", adversary_path(a), method: :delete,
-              form: { data: { turbo_confirm: "Delete this adversary?" } },
-              class: "text-red-700 underline bg-transparent p-0 font-inherit" %>
+        <span class="flex-1"><%= adversary.name %> (<%= t("adversaries.js.tier") %> <%= adversary.tier %> <%= t("adversaries.adversary_types.#{adversary.adversary_type}") %>)</span>
+        <%= link_to t(".edit"), edit_adversary_path(adversary), class: "text-dh-maroon underline cursor-pointer" %>
+        <%= button_to t(".delete"), adversary_path(adversary), method: :delete,
+              form: { data: { turbo_confirm: t(".delete_confirm") } },
+              class: "cursor-pointer text-red-700 underline bg-transparent p-0 font-inherit" %>
       </li>
     <% end %>
   </ul>

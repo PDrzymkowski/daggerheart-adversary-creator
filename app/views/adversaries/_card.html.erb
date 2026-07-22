@@ -1,28 +1,30 @@
-<div x-ref="card" class="bg-[#f5f1e6] border-4 border-double border-amber-800 rounded-lg p-6 shadow-lg font-serif text-stone-900">
-  <h2 class="text-2xl font-bold tracking-wide" x-text="name || 'ADVERSARY NAME'"></h2>
+<div x-ref="card" class="bg-dh-parchment border-4 border-double border-dh-maroon rounded-lg p-8 shadow-xl font-body text-dh-ink">
+  <h2 class="font-display text-2xl font-bold tracking-wide text-dh-maroon" x-text="name || i18n.namePlaceholder"></h2>
   <p class="italic font-semibold" x-text="typeLine()"></p>
   <p class="italic mt-2" x-text="description"></p>
-  <p class="mt-1"><span class="font-bold">Motives &amp; Tactics:</span> <span x-text="motives_tactics"></span></p>
+  <p class="mt-1"><span class="font-bold"><%= t(".motives_tactics_label") %></span> <span x-text="motives_tactics"></span></p>
 
-  <div class="border-t-2 border-b-2 border-amber-800 my-3 py-2 text-sm">
+  <div class="border-t-2 border-b-2 border-dh-maroon my-4 py-3 text-sm space-y-1">
     <p>
-      <span class="font-bold">Difficulty:</span> <span x-text="difficulty"></span> |
-      <span class="font-bold">Thresholds:</span> <span x-text="thresholdLine()"></span> |
-      <span class="font-bold">HP:</span> <span x-text="hp"></span> |
-      <span class="font-bold">Stress:</span> <span x-text="stress"></span>
+      <span class="font-bold"><%= t(".difficulty_label") %></span> <span x-text="difficulty"></span> |
+      <span class="font-bold"><%= t(".hp_label") %></span> <span x-text="hp"></span> |
+      <span class="font-bold"><%= t(".stress_label") %></span> <span x-text="stress"></span>
     </p>
     <p>
-      <span class="font-bold">ATK:</span> <span x-text="atkLine()"></span> |
-      <span x-text="attack_name"></span>: <span x-text="attack_range"></span> | <span x-text="damageLine()"></span>
+      <span class="font-bold"><%= t(".thresholds_label") %></span> <span x-text="thresholdLine()"></span>
+    </p>
+    <p>
+      <span class="font-bold"><%= t(".atk_label") %></span> <span x-text="atkLine()"></span> |
+      <span x-text="attack_name"></span>: <span x-text="rangeLabel()"></span> | <span x-text="damageLine()"></span>
     </p>
   </div>
 
-  <p class="text-sm" x-show="experience"><span class="font-bold">Experience:</span> <span x-text="experience"></span></p>
+  <p class="text-sm" x-show="experienceLine()"><span class="font-bold"><%= t(".experience_label") %></span> <span x-text="experienceLine()"></span></p>
 
-  <h3 class="text-xl font-bold mt-4">FEATURES</h3>
+  <h3 class="font-display text-xl font-bold mt-4 text-dh-maroon"><%= t(".features_heading") %></h3>
   <template x-for="(feature, index) in features">
     <p class="text-sm mt-2" x-show="!feature._destroy">
-      <span class="italic font-bold" x-text="feature.name + ' - ' + feature.feature_type + ':'"></span>
+      <span class="italic font-bold" x-text="feature.name + ' - ' + featureTypeLabel(feature.feature_type) + ':'"></span>
       <span x-text="' ' + feature.description"></span>
     </p>
   </template>

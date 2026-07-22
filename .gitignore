@@ -39,6 +39,7 @@
 # Superpowers workflow files (specs, plans, reviews) — never committed
 docs/superpowers/
 .superpowers/
+openspec/
 
 # Editor / IDE
 .idea/

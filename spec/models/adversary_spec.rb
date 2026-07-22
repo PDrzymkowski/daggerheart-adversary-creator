@@ -47,6 +47,37 @@ RSpec.describe Adversary, type: :model do
     expect(Adversary.new(valid_attrs(threshold_major: nil, threshold_severe: nil))).to be_valid
   end
 
+  it "allows the combined physical + magical damage type" do
+    expect(Adversary.new(valid_attrs(attack_type: "phy_mag"))).to be_valid
+  end
+
+  describe "experience values" do
+    it "accepts a named experience with a positive value" do
+      adversary = Adversary.new(valid_attrs(experiences: [ { "name" => "Tracking", "value" => 2 } ]))
+      expect(adversary).to be_valid
+    end
+
+    it "rejects a named experience with a zero value" do
+      adversary = Adversary.new(valid_attrs(experiences: [ { "name" => "Tracking", "value" => 0 } ]))
+      expect(adversary).not_to be_valid
+    end
+
+    it "rejects a named experience with a negative value" do
+      adversary = Adversary.new(valid_attrs(experiences: [ { "name" => "Tracking", "value" => -1 } ]))
+      expect(adversary).not_to be_valid
+    end
+
+    it "rejects a named experience with a missing value" do
+      adversary = Adversary.new(valid_attrs(experiences: [ { "name" => "Tracking", "value" => nil } ]))
+      expect(adversary).not_to be_valid
+    end
+
+    it "ignores an unnamed experience row regardless of its value" do
+      adversary = Adversary.new(valid_attrs(experiences: [ { "name" => "", "value" => nil } ]))
+      expect(adversary).to be_valid
+    end
+  end
+
   describe "#dup_with_features" do
     it "duplicates the adversary with unsaved copies of its features" do
       original = Adversary.create!(valid_attrs(template: true))

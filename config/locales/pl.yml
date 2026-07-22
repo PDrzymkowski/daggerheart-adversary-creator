@@ -1,0 +1,119 @@
+pl:
+  adversaries:
+    app_title: "Kreator Przeciwników Daggerheart"
+    locale:
+      en: "EN"
+      pl: "PL"
+    flash:
+      created: "Przeciwnik zapisany."
+      updated: "Przeciwnik zaktualizowany."
+      forked: "Zapisano jako nowego przeciwnika."
+      destroyed: "Przeciwnik usunięty."
+    index:
+      heading: "Przeciwnicy"
+      new_adversary: "Nowy przeciwnik"
+      templates_heading: "Szablony"
+      use_as_template: "Użyj jako szablonu"
+      your_adversaries_heading: "Twoi przeciwnicy"
+      empty: "Nic jeszcze nie zapisano — zacznij od szablonu powyżej lub utwórz pustego przeciwnika."
+      edit: "Edytuj"
+      delete: "Usuń"
+      delete_confirm: "Usunąć tego przeciwnika?"
+    form:
+      template_picker_label: "Zacznij od szablonu"
+      blank_option: "-- Pusty --"
+      damage_type_blank_option: "--"
+      section_identity: "Tożsamość"
+      section_stats: "Statystyki"
+      section_thresholds: "Progi Obrażeń"
+      section_attack: "Atak"
+      section_experiences: "Doświadczenia"
+      section_features: "Cechy"
+      experience_name_placeholder: "Nazwa doświadczenia"
+      add_experience: "+ Dodaj doświadczenie"
+      feature_name_placeholder: "Nazwa cechy"
+      add_feature: "+ Dodaj cechę"
+      remove: "×"
+      create_submit: "Utwórz przeciwnika"
+      update_submit: "Zaktualizuj przeciwnika"
+      placeholders:
+        name: "np. Szkieletowy Rycerz"
+        type_suffix: "np. Zasadzkowiec"
+        description: "Krótki opis fizyczny..."
+        motives_tactics: "np. Zasadzka, przytłoczenie, odwrót"
+        difficulty: "10"
+        threshold_major: "7"
+        threshold_severe: "12"
+        hp: "5"
+        stress: "3"
+        atk: "+2"
+        attack_name: "np. Szpony"
+        attack_damage: "np. 1k6+2"
+    card:
+      name_placeholder: "NAZWA PRZECIWNIKA"
+      motives_tactics_label: "Motywy i taktyki:"
+      difficulty_label: "Trudność:"
+      thresholds_label: "Progi:"
+      hp_label: "PŻ:"
+      stress_label: "Stres:"
+      atk_label: "ATK:"
+      experience_label: "Doświadczenie:"
+      features_heading: "CECHY"
+    builder:
+      download_png: "Pobierz PNG"
+    js:
+      tier: "Poziom"
+      none: "Brak"
+    adversary_types:
+      Bruiser: "Osiłek"
+      Horde: "Horda"
+      Leader: "Przywódca"
+      Minion: "Sługa"
+      Ranged: "Dystansowy"
+      Skulk: "Skradający się"
+      Social: "Społeczny"
+      Solo: "Samotnik"
+      Standard: "Standardowy"
+      Support: "Wsparcie"
+    ranges:
+      Melee: "Wręcz"
+      Very Close: "Bardzo blisko"
+      Close: "Blisko"
+      Far: "Daleko"
+      Very Far: "Bardzo daleko"
+    damage_types:
+      phy: "Fizyczne"
+      mag: "Magiczne"
+      phy_mag: "Fizyczne + Magiczne"
+    feature_types:
+      Passive: "Pasywna"
+      Action: "Akcja"
+      Reaction: "Reakcja"
+
+  activerecord:
+    models:
+      adversary: "Przeciwnik"
+    attributes:
+      adversary:
+        name: "Nazwa"
+        tier: "Poziom"
+        adversary_type: "Typ"
+        type_suffix: "Podtyp"
+        description: "Opis"
+        motives_tactics: "Motywy i taktyki"
+        difficulty: "Trudność"
+        threshold_major: "Poważne"
+        threshold_severe: "Krytyczne"
+        hp: "PŻ"
+        stress: "Stres"
+        atk: "ATK"
+        attack_name: "Nazwa ataku"
+        attack_range: "Zasięg"
+        attack_damage: "Obrażenia"
+        attack_type: "Typ obrażeń"
+    errors:
+      models:
+        adversary:
+          attributes:
+            base:
+              experience_value_invalid: "Wartość doświadczenia '%{name}' musi być liczbą dodatnią"

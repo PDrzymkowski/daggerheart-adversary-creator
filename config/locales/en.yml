@@ -1,31 +1,119 @@
-# Files in the config/locales directory are used for internationalization and
-# are automatically loaded by Rails. If you want to use locales other than
-# English, add the necessary files in this directory.
-#
-# To use the locales, use `I18n.t`:
-#
-#     I18n.t "hello"
-#
-# In views, this is aliased to just `t`:
-#
-#     <%= t("hello") %>
-#
-# To use a different locale, set it with `I18n.locale`:
-#
-#     I18n.locale = :es
-#
-# This would use the information in config/locales/es.yml.
-#
-# To learn more about the API, please read the Rails Internationalization guide
-# at https://guides.rubyonrails.org/i18n.html.
-#
-# Be aware that YAML interprets the following case-insensitive strings as
-# booleans: `true`, `false`, `on`, `off`, `yes`, `no`. Therefore, these strings
-# must be quoted to be interpreted as strings. For example:
-#
-#     en:
-#       "yes": yup
-#       enabled: "ON"
-
 en:
-  hello: "Hello world"
+  adversaries:
+    app_title: "Daggerheart Adversary Creator"
+    locale:
+      en: "EN"
+      pl: "PL"
+    flash:
+      created: "Adversary saved."
+      updated: "Adversary updated."
+      forked: "Saved as a new adversary."
+      destroyed: "Adversary deleted."
+    index:
+      heading: "Adversaries"
+      new_adversary: "New Adversary"
+      templates_heading: "Templates"
+      use_as_template: "Use as template"
+      your_adversaries_heading: "Your Adversaries"
+      empty: "Nothing saved yet — start from a template above or create a blank one."
+      edit: "Edit"
+      delete: "Delete"
+      delete_confirm: "Delete this adversary?"
+    form:
+      template_picker_label: "Start from a template"
+      blank_option: "-- Blank --"
+      damage_type_blank_option: "--"
+      section_identity: "Identity"
+      section_stats: "Stats"
+      section_thresholds: "Thresholds"
+      section_attack: "Attack"
+      section_experiences: "Experiences"
+      section_features: "Features"
+      experience_name_placeholder: "Experience name"
+      add_experience: "+ Add Experience"
+      feature_name_placeholder: "Feature name"
+      add_feature: "+ Add Feature"
+      remove: "×"
+      create_submit: "Create Adversary"
+      update_submit: "Update Adversary"
+      placeholders:
+        name: "e.g. Skeletal Knight"
+        type_suffix: "e.g. Ambusher"
+        description: "A brief physical description..."
+        motives_tactics: "e.g. Ambush, overwhelm, retreat"
+        difficulty: "10"
+        threshold_major: "7"
+        threshold_severe: "12"
+        hp: "5"
+        stress: "3"
+        atk: "+2"
+        attack_name: "e.g. Claws"
+        attack_damage: "e.g. 1d6+2"
+    card:
+      name_placeholder: "ADVERSARY NAME"
+      motives_tactics_label: "Motives & Tactics:"
+      difficulty_label: "Difficulty:"
+      thresholds_label: "Thresholds:"
+      hp_label: "HP:"
+      stress_label: "Stress:"
+      atk_label: "ATK:"
+      experience_label: "Experience:"
+      features_heading: "FEATURES"
+    builder:
+      download_png: "Download PNG"
+    js:
+      tier: "Tier"
+      none: "None"
+    adversary_types:
+      Bruiser: "Bruiser"
+      Horde: "Horde"
+      Leader: "Leader"
+      Minion: "Minion"
+      Ranged: "Ranged"
+      Skulk: "Skulk"
+      Social: "Social"
+      Solo: "Solo"
+      Standard: "Standard"
+      Support: "Support"
+    ranges:
+      Melee: "Melee"
+      Very Close: "Very Close"
+      Close: "Close"
+      Far: "Far"
+      Very Far: "Very Far"
+    damage_types:
+      phy: "Physical"
+      mag: "Magical"
+      phy_mag: "Physical + Magical"
+    feature_types:
+      Passive: "Passive"
+      Action: "Action"
+      Reaction: "Reaction"
+
+  activerecord:
+    models:
+      adversary: "Adversary"
+    attributes:
+      adversary:
+        name: "Name"
+        tier: "Tier"
+        adversary_type: "Type"
+        type_suffix: "Type suffix"
+        description: "Description"
+        motives_tactics: "Motives & Tactics"
+        difficulty: "Difficulty"
+        threshold_major: "Major"
+        threshold_severe: "Severe"
+        hp: "HP"
+        stress: "Stress"
+        atk: "ATK"
+        attack_name: "Attack name"
+        attack_range: "Range"
+        attack_damage: "Damage"
+        attack_type: "Damage type"
+    errors:
+      models:
+        adversary:
+          attributes:
+            base:
+              experience_value_invalid: "Experience '%{name}' value must be a positive number"

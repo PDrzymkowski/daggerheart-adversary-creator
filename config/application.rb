@@ -38,5 +38,13 @@ module DaggerheartAdversaryCreator
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    config.i18n.available_locales = [ :en, :pl ]
+    config.i18n.default_locale = :en
+    # Missing pl.* keys (mainly built-in ActiveRecord validation message text,
+    # since we don't ship the rails-i18n gem) fall back to English instead of
+    # rendering "translation missing" — our own adversaries.*/attribute keys
+    # are translated explicitly in pl.yml regardless.
+    config.i18n.fallbacks = true
   end
 end

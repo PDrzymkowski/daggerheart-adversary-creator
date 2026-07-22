@@ -17,7 +17,8 @@ class Adversary < ApplicationRecord
   validates :attack_damage, presence: true
   validates :threshold_major, numericality: { only_integer: true }, allow_nil: true
   validates :threshold_severe, numericality: { only_integer: true }, allow_nil: true
-  validates :attack_type, inclusion: { in: %w[phy mag] }, allow_blank: true
+  validates :attack_type, inclusion: { in: %w[phy mag phy_mag] }, allow_blank: true
+  validate :experiences_must_have_positive_values
 
   def dup_with_features
     copy = dup
@@ -29,7 +30,7 @@ class Adversary < ApplicationRecord
   BUILDER_ATTRIBUTES = %w[
     id name tier adversary_type type_suffix description motives_tactics difficulty
     threshold_major threshold_severe hp stress atk attack_name attack_range
-    attack_damage attack_type experience
+    attack_damage attack_type experiences
   ].freeze
 
   def to_builder_json
@@ -44,5 +45,19 @@ class Adversary < ApplicationRecord
         "features" => a.features.map { |f| { name: f.name, feature_type: f.feature_type, description: f.description, _destroy: false } }
       )
     end.to_json
+  end
+
+  private
+
+  def experiences_must_have_positive_values
+    Array(experiences).each do |entry|
+      name = entry["name"].presence || entry[:name].presence
+      next if name.blank?
+
+      value = entry["value"] || entry[:value]
+      next if value.is_a?(Integer) && value >= 1
+
+      errors.add(:base, :experience_value_invalid, name: name)
+    end
   end
 end

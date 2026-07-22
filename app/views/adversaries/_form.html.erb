@@ -1,4 +1,4 @@
-<%= form_with model: adversary, class: "space-y-3" do |f| %>
+<%= form_with model: adversary, class: "space-y-6" do |f| %>
   <% if adversary.errors.any? %>
     <div class="bg-red-100 text-red-800 p-3 rounded">
       <ul>
@@ -9,82 +9,147 @@
     </div>
   <% end %>
 
-  <div>
-    <label class="font-semibold">Start from a template</label>
-    <select class="border rounded px-2 py-1 w-full" x-model="selectedTemplateId" @change="loadTemplate($event.target.value)">
-      <option value="">-- Blank --</option>
-      <template x-for="(t, index) in templates" :key="index">
-        <option :value="index" x-text="'Tier ' + t.tier + ' ' + t.adversary_type + ': ' + t.name"></option>
-      </template>
-    </select>
-  </div>
+  <div class="dh-panel">
+    <h3 class="dh-panel-heading"><%= t(".section_identity") %></h3>
 
-  <div><%= f.label :name %> <%= f.text_field :name, class: "border rounded px-2 py-1 w-full", "x-model" => "name" %></div>
-
-  <div class="flex gap-3">
-    <div>
-      <%= f.label :tier %>
-      <%= f.select :tier, (1..4), {}, class: "border rounded px-2 py-1", "x-model.number" => "tier" %>
+    <div class="mb-4">
+      <label class="block font-semibold mb-1"><%= t(".template_picker_label") %></label>
+      <select class="dh-input" x-model="selectedTemplateId" @change="loadTemplate($event.target.value)">
+        <option value=""><%= t(".blank_option") %></option>
+        <template x-for="(t, index) in templates" :key="index">
+          <option :value="index" x-text="templateLabel(t)"></option>
+        </template>
+      </select>
     </div>
-    <div>
-      <%= f.label :adversary_type, "Type" %>
-      <%= f.select :adversary_type, Adversary::TYPES, {}, class: "border rounded px-2 py-1", "x-model" => "adversary_type" %>
+
+    <div class="mb-4">
+      <%= f.label :name, class: "block font-semibold mb-1" %>
+      <%= f.text_field :name, class: "dh-input", placeholder: t(".placeholders.name"), "x-model" => "name" %>
     </div>
-    <div>
-      <%= f.label :type_suffix, "Type suffix" %>
-      <%= f.text_field :type_suffix, class: "border rounded px-2 py-1", "x-model" => "type_suffix" %>
-    </div>
-  </div>
 
-  <div><%= f.label :description %> <%= f.text_area :description, rows: 2, class: "border rounded px-2 py-1 w-full", "x-model" => "description" %></div>
-  <div><%= f.label :motives_tactics, "Motives & Tactics" %> <%= f.text_field :motives_tactics, class: "border rounded px-2 py-1 w-full", "x-model" => "motives_tactics" %></div>
-
-  <div class="flex gap-3">
-    <div><%= f.label :difficulty %> <%= f.number_field :difficulty, class: "border rounded px-2 py-1 w-20", "x-model.number" => "difficulty" %></div>
-    <div><%= f.label :threshold_major, "Threshold (major)" %> <%= f.number_field :threshold_major, class: "border rounded px-2 py-1 w-20", "x-model.number" => "threshold_major" %></div>
-    <div><%= f.label :threshold_severe, "Threshold (severe)" %> <%= f.number_field :threshold_severe, class: "border rounded px-2 py-1 w-20", "x-model.number" => "threshold_severe" %></div>
-    <div><%= f.label :hp, "HP" %> <%= f.number_field :hp, class: "border rounded px-2 py-1 w-20", "x-model.number" => "hp" %></div>
-    <div><%= f.label :stress %> <%= f.number_field :stress, class: "border rounded px-2 py-1 w-20", "x-model.number" => "stress" %></div>
-    <div><%= f.label :atk, "ATK" %> <%= f.number_field :atk, class: "border rounded px-2 py-1 w-20", "x-model.number" => "atk" %></div>
-  </div>
-
-  <div class="flex gap-3">
-    <div><%= f.label :attack_name, "Attack name" %> <%= f.text_field :attack_name, class: "border rounded px-2 py-1", "x-model" => "attack_name" %></div>
-    <div>
-      <%= f.label :attack_range, "Range" %>
-      <%= f.select :attack_range, Adversary::RANGES, {}, class: "border rounded px-2 py-1", "x-model" => "attack_range" %>
-    </div>
-    <div><%= f.label :attack_damage, "Damage" %> <%= f.text_field :attack_damage, class: "border rounded px-2 py-1", "x-model" => "attack_damage" %></div>
-    <div>
-      <%= f.label :attack_type, "Damage type" %>
-      <%= f.select :attack_type, [["", ""], ["Physical", "phy"], ["Magical", "mag"]], {}, class: "border rounded px-2 py-1", "x-model" => "attack_type" %>
-    </div>
-  </div>
-
-  <div><%= f.label :experience %> <%= f.text_field :experience, class: "border rounded px-2 py-1 w-full", "x-model" => "experience" %></div>
-
-  <h3 class="font-bold mt-4">Features</h3>
-  <template x-for="(feature, index) in features" :key="index">
-    <div class="border rounded p-3 mb-2" x-show="!feature._destroy">
-      <input type="hidden" :name="'adversary[features_attributes][' + index + '][id]'" :value="feature.id || ''">
-      <input type="hidden" :name="'adversary[features_attributes][' + index + '][_destroy]'" :value="feature._destroy ? '1' : '0'">
-      <input type="hidden" :name="'adversary[features_attributes][' + index + '][position]'" :value="index">
-      <div class="flex gap-2 mb-1">
-        <input type="text" placeholder="Feature name" class="border rounded px-2 py-1 flex-1"
-          :name="'adversary[features_attributes][' + index + '][name]'" x-model="feature.name">
-        <select class="border rounded px-2 py-1"
-          :name="'adversary[features_attributes][' + index + '][feature_type]'" x-model="feature.feature_type">
-          <option>Passive</option>
-          <option>Action</option>
-          <option>Reaction</option>
-        </select>
-        <button type="button" class="text-red-700 font-bold px-2" @click="removeFeature(index)">&times;</button>
+    <div class="flex gap-3 mb-4">
+      <div class="flex-1">
+        <%= f.label :tier, class: "block font-semibold mb-1" %>
+        <%= f.select :tier, (1..4), {}, class: "dh-input", "x-model.number" => "tier" %>
       </div>
-      <textarea class="border rounded px-2 py-1 w-full" rows="2"
-        :name="'adversary[features_attributes][' + index + '][description]'" x-model="feature.description"></textarea>
+      <div class="flex-1">
+        <%= f.label :adversary_type, class: "block font-semibold mb-1" %>
+        <%= f.select :adversary_type, Adversary::TYPES.map { |type| [t("adversaries.adversary_types.#{type}"), type] }, {}, class: "dh-input", "x-model" => "adversary_type" %>
+      </div>
+      <div class="flex-1">
+        <%= f.label :type_suffix, class: "block font-semibold mb-1" %>
+        <%= f.text_field :type_suffix, class: "dh-input", placeholder: t(".placeholders.type_suffix"), "x-model" => "type_suffix" %>
+      </div>
     </div>
-  </template>
-  <button type="button" class="mt-2 px-3 py-1 border rounded font-semibold" @click="addFeature()">+ Add Feature</button>
 
-  <div><%= f.submit class: "bg-amber-800 text-white px-4 py-2 rounded font-semibold" %></div>
+    <div class="mb-4">
+      <%= f.label :description, class: "block font-semibold mb-1" %>
+      <%= f.text_area :description, rows: 2, class: "dh-input", placeholder: t(".placeholders.description"), "x-model" => "description" %>
+    </div>
+    <div>
+      <%= f.label :motives_tactics, class: "block font-semibold mb-1" %>
+      <%= f.text_field :motives_tactics, class: "dh-input", placeholder: t(".placeholders.motives_tactics"), "x-model" => "motives_tactics" %>
+    </div>
+  </div>
+
+  <div class="dh-panel">
+    <h3 class="dh-panel-heading"><%= t(".section_stats") %></h3>
+    <div class="flex flex-wrap gap-3">
+      <div class="w-24">
+        <%= f.label :difficulty, class: "block font-semibold mb-1" %>
+        <%= f.number_field :difficulty, class: "dh-input", placeholder: t(".placeholders.difficulty"), "x-model.number" => "difficulty" %>
+      </div>
+      <div class="w-24">
+        <%= f.label :hp, class: "block font-semibold mb-1" %>
+        <%= f.number_field :hp, class: "dh-input", placeholder: t(".placeholders.hp"), "x-model.number" => "hp" %>
+      </div>
+      <div class="w-24">
+        <%= f.label :stress, class: "block font-semibold mb-1" %>
+        <%= f.number_field :stress, class: "dh-input", placeholder: t(".placeholders.stress"), "x-model.number" => "stress" %>
+      </div>
+      <div class="w-24">
+        <%= f.label :atk, class: "block font-semibold mb-1" %>
+        <%= f.number_field :atk, class: "dh-input", placeholder: t(".placeholders.atk"), "x-model.number" => "atk" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="dh-panel">
+    <h3 class="dh-panel-heading"><%= t(".section_thresholds") %></h3>
+    <div class="flex flex-wrap gap-3">
+      <div class="w-24">
+        <%= f.label :threshold_major, class: "block font-semibold mb-1" %>
+        <%= f.number_field :threshold_major, class: "dh-input", placeholder: t(".placeholders.threshold_major"), "x-model.number" => "threshold_major" %>
+      </div>
+      <div class="w-24">
+        <%= f.label :threshold_severe, class: "block font-semibold mb-1" %>
+        <%= f.number_field :threshold_severe, class: "dh-input", placeholder: t(".placeholders.threshold_severe"), "x-model.number" => "threshold_severe" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="dh-panel">
+    <h3 class="dh-panel-heading"><%= t(".section_attack") %></h3>
+    <div class="flex flex-wrap gap-3">
+      <div class="flex-1 min-w-[10rem]">
+        <%= f.label :attack_name, class: "block font-semibold mb-1" %>
+        <%= f.text_field :attack_name, class: "dh-input", placeholder: t(".placeholders.attack_name"), "x-model" => "attack_name" %>
+      </div>
+      <div class="flex-1 min-w-[8rem]">
+        <%= f.label :attack_range, class: "block font-semibold mb-1" %>
+        <%= f.select :attack_range, Adversary::RANGES.map { |range| [t("adversaries.ranges.#{range}"), range] }, {}, class: "dh-input", "x-model" => "attack_range" %>
+      </div>
+      <div class="flex-1 min-w-[8rem]">
+        <%= f.label :attack_damage, class: "block font-semibold mb-1" %>
+        <%= f.text_field :attack_damage, class: "dh-input", placeholder: t(".placeholders.attack_damage"), "x-model" => "attack_damage" %>
+      </div>
+      <div class="flex-1 min-w-[8rem]">
+        <%= f.label :attack_type, class: "block font-semibold mb-1" %>
+        <%= f.select :attack_type,
+              [[t(".damage_type_blank_option"), ""]] + %w[phy mag phy_mag].map { |type| [t("adversaries.damage_types.#{type}"), type] },
+              {}, class: "dh-input", "x-model" => "attack_type" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="dh-panel">
+    <h3 class="dh-panel-heading"><%= t(".section_experiences") %></h3>
+    <template x-for="(exp, index) in experiences" :key="index">
+      <div class="flex gap-2 mb-2 items-center">
+        <input type="text" placeholder="<%= t(".experience_name_placeholder") %>" class="dh-input flex-1"
+          :name="'adversary[experiences][' + index + '][name]'" x-model="exp.name">
+        <input type="number" min="1" step="1" placeholder="+2" class="dh-input w-20"
+          :name="'adversary[experiences][' + index + '][value]'" x-model.number="exp.value">
+        <button type="button" class="dh-btn text-dh-maroon" @click="removeExperience(index)"><%= t(".remove") %></button>
+      </div>
+    </template>
+    <button type="button" class="dh-btn" @click="addExperience()"><%= t(".add_experience") %></button>
+  </div>
+
+  <div class="dh-panel">
+    <h3 class="dh-panel-heading"><%= t(".section_features") %></h3>
+    <template x-for="(feature, index) in features" :key="index">
+      <div class="border border-dh-ink/20 rounded-md p-3 mb-2" x-show="!feature._destroy">
+        <input type="hidden" :name="'adversary[features_attributes][' + index + '][id]'" :value="feature.id || ''">
+        <input type="hidden" :name="'adversary[features_attributes][' + index + '][_destroy]'" :value="feature._destroy ? '1' : '0'">
+        <input type="hidden" :name="'adversary[features_attributes][' + index + '][position]'" :value="index">
+        <div class="flex gap-2 mb-1">
+          <input type="text" placeholder="<%= t(".feature_name_placeholder") %>" class="dh-input flex-1"
+            :name="'adversary[features_attributes][' + index + '][name]'" x-model="feature.name">
+          <select class="dh-input w-36"
+            :name="'adversary[features_attributes][' + index + '][feature_type]'" x-model="feature.feature_type">
+            <% Feature::TYPES.each do |type| %>
+              <option value="<%= type %>"><%= t("adversaries.feature_types.#{type}") %></option>
+            <% end %>
+          </select>
+          <button type="button" class="dh-btn text-dh-maroon" @click="removeFeature(index)"><%= t(".remove") %></button>
+        </div>
+        <textarea class="dh-input" rows="2"
+          :name="'adversary[features_attributes][' + index + '][description]'" x-model="feature.description"></textarea>
+      </div>
+    </template>
+    <button type="button" class="dh-btn" @click="addFeature()"><%= t(".add_feature") %></button>
+  </div>
+
+  <div><%= f.submit adversary.new_record? ? t(".create_submit") : t(".update_submit"), class: "dh-btn-primary" %></div>
 <% end %>

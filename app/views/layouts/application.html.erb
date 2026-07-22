@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Daggerheart Adversary Creator" %></title>
+    <title><%= content_for(:title) || t("adversaries.app_title") %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Daggerheart Adversary Creator">
+    <meta name="application-name" content="<%= t("adversaries.app_title") %>">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
@@ -23,8 +23,19 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="bg-dh-parchment font-body text-dh-ink">
+    <header class="bg-dh-maroon text-dh-parchment shadow-md">
+      <div class="container mx-auto flex items-center justify-between gap-3 px-5 py-4">
+        <h1 class="font-display text-2xl font-bold tracking-wide text-dh-gold"><%= t("adversaries.app_title") %></h1>
+        <nav class="flex gap-2 text-sm font-semibold">
+          <%= link_to t("adversaries.locale.en"), url_for(request.query_parameters.merge(locale: "en")),
+                class: "cursor-pointer rounded px-2 py-1 #{I18n.locale == :en ? "bg-dh-gold text-dh-maroon" : "text-dh-parchment hover:bg-dh-maroon-light"}" %>
+          <%= link_to t("adversaries.locale.pl"), url_for(request.query_parameters.merge(locale: "pl")),
+                class: "cursor-pointer rounded px-2 py-1 #{I18n.locale == :pl ? "bg-dh-gold text-dh-maroon" : "text-dh-parchment hover:bg-dh-maroon-light"}" %>
+        </nav>
+      </div>
+    </header>
+    <main class="container mx-auto flex px-5 py-8">
       <%= yield %>
     </main>
   </body>

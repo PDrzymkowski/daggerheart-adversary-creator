@@ -24,7 +24,7 @@ class AdversariesController < ApplicationController
     @adversary = Adversary.new(adversary_params)
     @adversary.template = false
     if @adversary.save
-      redirect_to adversaries_path, notice: "Adversary saved."
+      redirect_to adversaries_path, notice: t("adversaries.flash.created")
     else
       render :new, status: :unprocessable_content
     end
@@ -37,13 +37,13 @@ class AdversariesController < ApplicationController
       forked.assign_attributes(fork_safe_params)
       forked.features = fork_features
       if forked.save
-        redirect_to adversaries_path, notice: "Saved as a new adversary."
+        redirect_to adversaries_path, notice: t("adversaries.flash.forked")
       else
         @adversary = forked
         render :edit, status: :unprocessable_content
       end
     elsif @adversary.update(adversary_params)
-      redirect_to adversaries_path, notice: "Adversary updated."
+      redirect_to adversaries_path, notice: t("adversaries.flash.updated")
     else
       render :edit, status: :unprocessable_content
     end
@@ -51,7 +51,7 @@ class AdversariesController < ApplicationController
 
   def destroy
     @adversary.destroy
-    redirect_to adversaries_path, notice: "Adversary deleted."
+    redirect_to adversaries_path, notice: t("adversaries.flash.destroyed")
   end
 
   private
@@ -61,12 +61,29 @@ class AdversariesController < ApplicationController
   end
 
   def adversary_params
-    params.require(:adversary).permit(
+    permitted = params.require(:adversary).permit(
       :name, :tier, :adversary_type, :type_suffix, :description, :motives_tactics,
       :difficulty, :threshold_major, :threshold_severe, :hp, :stress, :atk,
-      :attack_name, :attack_range, :attack_damage, :attack_type, :experience,
-      features_attributes: [ :id, :name, :feature_type, :description, :position, :_destroy ]
+      :attack_name, :attack_range, :attack_damage, :attack_type,
+      features_attributes: [ :id, :name, :feature_type, :description, :position, :_destroy ],
+      experiences: [ :name, :value ]
     )
+    permitted[:experiences] = normalized_experiences(permitted[:experiences]) if permitted.key?(:experiences)
+    permitted
+  end
+
+  # Drops rows the user left entirely blank (an untouched "add experience" row)
+  # and casts value to an integer, since number_field always posts a string.
+  def normalized_experiences(raw)
+    entries = raw.respond_to?(:values) ? raw.values : Array(raw)
+    entries.filter_map do |entry|
+      entry = entry.to_h
+      name = entry["name"].to_s.strip
+      value = entry["value"].presence
+      next if name.blank? && value.blank?
+
+      { "name" => name, "value" => value.present? ? value.to_i : nil }
+    end
   end
 
   # Same permitted params as #adversary_params, minus features_attributes.

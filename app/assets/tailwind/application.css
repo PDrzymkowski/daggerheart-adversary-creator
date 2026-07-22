@@ -1,1 +1,39 @@
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Vollkorn:ital,wght@0,400;0,600;1,400&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --color-dh-maroon: #3a0d10;
+  --color-dh-maroon-light: #5c1a1f;
+  --color-dh-gold: #c9a24b;
+  --color-dh-gold-light: #e2c77e;
+  --color-dh-parchment: #f5f1e6;
+  --color-dh-ink: #2a2118;
+
+  --font-display: "Cinzel", serif;
+  --font-body: "Vollkorn", serif;
+}
+
+@layer components {
+  .dh-input {
+    @apply w-full rounded-md border border-dh-ink/25 bg-white px-3 py-1.5 text-dh-ink shadow-sm transition-colors;
+    @apply focus:border-dh-gold focus:outline-none focus:ring-2 focus:ring-dh-gold/40;
+  }
+
+  .dh-btn {
+    @apply inline-flex cursor-pointer items-center justify-center rounded-md border border-dh-ink/20 px-4 py-2 font-semibold text-dh-ink transition-colors;
+    @apply hover:bg-dh-ink/5 active:bg-dh-ink/10;
+  }
+
+  .dh-btn-primary {
+    @apply inline-flex cursor-pointer items-center justify-center rounded-md border border-dh-maroon bg-dh-maroon px-4 py-2 font-semibold text-dh-parchment transition-colors;
+    @apply hover:bg-dh-maroon-light active:bg-dh-maroon;
+  }
+
+  .dh-panel {
+    @apply rounded-lg border border-dh-ink/10 bg-white/60 p-4 shadow-sm;
+  }
+
+  .dh-panel-heading {
+    @apply font-display text-lg font-bold text-dh-maroon mb-3;
+  }
+}
